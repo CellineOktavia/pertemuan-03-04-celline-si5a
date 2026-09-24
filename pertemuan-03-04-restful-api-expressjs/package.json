@@ -1,0 +1,12 @@
+{
+  "name": "mini-project-restful-api-expressjs",
+  "version": "1.0.0",
+  "description": "Starter RESTful API CRUD dengan Express.js - Pertemuan 3-4 PAW II",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
