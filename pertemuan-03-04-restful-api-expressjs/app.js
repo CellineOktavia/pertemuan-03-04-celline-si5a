@@ -24,7 +24,7 @@ app.get("/kost", (req, res) => {
 });
 
 //Latihan 1
-// Buat fungsi untuk mengambil data kost aktif, dengan alamat: kost/aktif
+// Buat fungsi untuk mengambil data kost tersedia, dengan alamat: kost/tersedia
 app.get("/kost/tersedia", (req, res) => {
   const kostTersedia = kost.filter((m) => m.status.toLowerCase() === "tersedia");
   res.json(kostTersedia);
