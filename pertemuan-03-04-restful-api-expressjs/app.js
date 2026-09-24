@@ -1,7 +1,7 @@
 // Mini Project - Pertemuan 3-4: RESTful API CRUD dengan Express.js
-// Entitas: mahasiswa (id, nama, jurusan)
+// Entitas: kost (id, nama, harga, lokasi, status)
 //
-// TODO Mahasiswa: lengkapi setiap handler di bawah ini sesuai komentar.
+// TODO kost: lengkapi setiap handler di bawah ini sesuai komentar.
 // Jalankan dengan: npm install && npm start
 
 const express = require("express");
@@ -10,31 +10,32 @@ const PORT = 3000;
 
 app.use(express.json());
 
-let mahasiswa = [
-  { id: 1, nama: "Andi", jurusan: "Sistem Informasi", status : "aktif"},
-  { id: 2, nama: "Budi", jurusan: "Informatika", status : "Cuti"},
-  { id: 3, nama: "Citra", jurusan: "Teknik Komputer", status : "Cuti"},
-  { id: 4, nama: "Dewi", jurusan: "Sistem Informasi", status : "Aktif"},
+let kost = [
+  { id: 1, nama: "Kost Harmoni", lokasi: "Bukit Besar, Palembang", harga: "1200000", status: "tersedia"},
+  { id: 2, nama: "Kost Drian", lokasi: "Taksam, Palembang", harga: "2000000", status: "tersedia"},
+  { id: 3, nama: "Kost Sejahtera", lokasi: "Bangau, Palembang", harga: "1500000", status: "tidak tersedia"},
+  { id: 4, nama: "Kost Pluto", lokasi: "Kenten Laut, Palembang", harga: "1000000", status: "tidak tersedia"},
+  { id: 5, nama: "Kost Juniorror", lokasi: "Plaju Kulon, Palembang", harga: "800000", status: "tersedia"}
 ];
 
-// TODO 1: GET /mahasiswa -> kirim seluruh data sebagai JSON
-app.get("/mahasiswa", (req, res) => {
-  res.json(mahasiswa);
+// TODO 1: GET /kost -> kirim seluruh data sebagai JSON
+app.get("/kost", (req, res) => {
+  res.json(kost);
 });
 
 //Latihan 1
-// Buat fungsi untuk mengambil data mahasiswa aktif, dengan alamat: mahasiswa/aktif
-app.get("/mahasiswa/aktif", (req, res) => {
-  const mahasiswaAktif = mahasiswa.filter((m) => m.status.toLowerCase() === "aktif");
-  res.json(mahasiswaAktif);
+// Buat fungsi untuk mengambil data kost aktif, dengan alamat: kost/aktif
+app.get("/kost/tersedia", (req, res) => {
+  const kostTersedia = kost.filter((m) => m.status.toLowerCase() === "tersedia");
+  res.json(kostTersedia);
 });
 
-// TODO 2: GET /mahasiswa/:id -> cari data berdasarkan id,
+// TODO 2: GET /kost/:id -> cari data berdasarkan id,
 // kirim 404 dengan { message: 'Data tidak ditemukan' } jika tidak ada
-app.get("/mahasiswa/:id", (req, res) => {
+app.get("/kost/:id", (req, res) => {
   const { id } = req.params;
-  const mahasiswaId = parseInt(id);
-  const data = mahasiswa.find((m) => m.id === mahasiswaId);
+  const kostId = parseInt(id);
+  const data = kost.find((m) => m.id === kostId);
 
   if (!data) {
     return res.status(404).json({ message: 'Data tidak ditemukan' });
@@ -43,50 +44,52 @@ app.get("/mahasiswa/:id", (req, res) => {
   res.json(data);
 });
 
-// TODO 3: POST /mahasiswa -> ambil { nama, jurusan } dari req.body,
-// buat objek baru dengan id = mahasiswa.length + 1, simpan ke array,
+// TODO 3: POST /kost -> ambil { nama, jurusan } dari req.body,
+// buat objek baru dengan id = kost.length + 1, simpan ke array,
 // kirim response dengan status 201
-app.post("/mahasiswa", (req, res) => {
-  const { nama, jurusan } = req.body;
-  const newMahasiswa = {
-    id: mahasiswa.length + 1,
+app.post("/kost", (req, res) => {
+  const { nama, lokasi, harga, status } = req.body;
+  const newKost = {
+    id: kost.length + 1,
     nama,
-    jurusan
+    lokasi,
+    harga,
+    status
   };
-  mahasiswa.push(newMahasiswa);
-  res.status(201).json(newMahasiswa);
+  kost.push(newKost);
+  res.status(201).json(newKost);
 });
 
-// TODO 4: PUT /mahasiswa/:id -> cari index berdasarkan id,
+// TODO 4: PUT /kost/:id -> cari index berdasarkan id,
 // jika tidak ditemukan kirim 404, jika ditemukan gabungkan data lama
 // dengan req.body lalu kirim data yang telah diperbarui
-app.put("/mahasiswa/:id", (req, res) => {
+app.put("/kost/:id", (req, res) => {
   const { id } = req.params;
-  const mahasiswaId = parseInt(id);
-  const index = mahasiswa.findIndex((m) => m.id === mahasiswaId);
+  const kostId = parseInt(id);
+  const index = kost.findIndex((m) => m.id === kostId);
 
   if (index === -1) {
     return res.status(404).json({ message: 'Data tidak ditemukan' });
   }
 
-  const { nama, jurusan } = req.body;
-  mahasiswa[index] = { ...mahasiswa[index], nama, jurusan };
-  res.json(mahasiswa[index]);
+  const { nama, lokasi, harga, status } = req.body;
+  kost[index] = { ...kost[index], nama, lokasi, harga, status };
+  res.json(kost[index]);
 });
 
-// TODO 5: DELETE /mahasiswa/:id -> cari index berdasarkan id,
+// TODO 5: DELETE /kost/:id -> cari index berdasarkan id,
 // jika tidak ditemukan kirim 404, jika ditemukan hapus dari array
 // dan kirim response dengan status 204
-app.delete("/mahasiswa/:id", (req, res) => {
+app.delete("/kost/:id", (req, res) => {
   const { id } = req.params;
-  const mahasiswaId = parseInt(id);
-  const index = mahasiswa.findIndex((m) => m.id === mahasiswaId);
+  const kostId = parseInt(id);
+  const index = kost.findIndex((m) => m.id === kostId);
 
   if (index === -1) {
     return res.status(404).json({ message: 'Data tidak ditemukan' });
   }
 
-  mahasiswa.splice(index, 1);
+  kost.splice(index, 1);
   res.status(204).send();
 });
 
