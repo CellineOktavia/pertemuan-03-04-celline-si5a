@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "PAWII - KOST API (Starter)",
+    "description": "Mini Project Pertemuan 8: lengkapi setiap tab Tests (// TODO) pada request di bawah ini.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET All Kost",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/kost",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// TODO 1: tambahkan pm.test yang memeriksa status code 200",
+              "pm.test('Status code adalah 200', function(){",
+              "pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// TODO 2: tambahkan pm.test yang memastikan response berupa array",
+              "// gunakan pm.response.json() dan pm.expect(...).to.be.an('array')",
+              "pm.test('Response berupa array', function(){",
+              "const jsonData = pm.response.json();",
+              "pm.expect(jsonData).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Tambah Kost",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama\": \"Kost Musi Raya\",\n  \"lokasi\": \"KM 7\",\n  \"harga\": 1000000,\n  \"status\": \"tersedia\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/kost",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// TODO 3: tambahkan pm.test yang memeriksa status code 201",
+              "pm.test('Status code adalah 201', function () {",
+              "pm.response.to.have.status(201);",
+              "});",
+              "",
+              "// TODO 4: simpan id dari response ke environment variable",
+              "// 'kostId' menggunakan pm.environment.set(), agar dapat",
+              "// dipakai oleh request 'GET Satu Kost' di bawah ini",
+              "const jsonData = pm.response.json();",
+              "pm.environment.set('kostId', jsonData.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET Satu Kost",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/kost/{{kostId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost",
+            "{{kostId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// TODO 5: tambahkan pm.test yang memeriksa status code 200",
+              "pm.test('Status code adalah 200', function(){",
+              "pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// TODO 6: tambahkan pm.test yang memastikan data memiliki",
+              "// properti 'nama'",
+              "pm.test('Data memiliki properti nama', function () {",
+              "const jsonData = pm.response.json();",
+              "pm.expect(jsonData).to.have.property('nama');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
