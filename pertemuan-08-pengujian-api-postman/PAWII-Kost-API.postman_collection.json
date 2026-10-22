@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "PAWII - KOST API (Starter)",
-    "description": "Mini Project Pertemuan 8: lengkapi setiap tab Tests (// TODO) pada request di bawah ini.",
+    "name": "PAWII - KOST API (Complete Automated Tests)",
+    "description": "Postman Collection lengkap untuk pengujian API Kost beserta automated test scripts.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -26,16 +26,51 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "// TODO 1: tambahkan pm.test yang memeriksa status code 200",
-              "pm.test('Status code adalah 200', function(){",
-              "pm.response.to.have.status(200);",
+              "pm.test('Status code adalah 200', function () {",
+              "    pm.response.to.have.status(200);",
               "});",
               "",
-              "// TODO 2: tambahkan pm.test yang memastikan response berupa array",
-              "// gunakan pm.response.json() dan pm.expect(...).to.be.an('array')",
-              "pm.test('Response berupa array', function(){",
-              "const jsonData = pm.response.json();",
-              "pm.expect(jsonData).to.be.an('array');",
+              "pm.test('Response berupa array', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET Kost Tersedia",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/kost/tersedia",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost",
+            "tersedia"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code adalah 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Semua item berstatus tersedia', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "    jsonData.forEach(function(item) {",
+              "        pm.expect(item.status.toLowerCase()).to.eql('tersedia');",
+              "    });",
               "});"
             ]
           }
@@ -54,7 +89,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"nama\": \"Kost Musi Raya\",\n  \"lokasi\": \"KM 7\",\n  \"harga\": 1000000,\n  \"status\": \"tersedia\"\n}"
+          "raw": "{\n  \"nama\": \"Kost Musi Raya\",\n  \"lokasi\": \"KM 7\",\n  \"harga\": \"1000000\",\n  \"status\": \"tersedia\"\n}"
         },
         "url": {
           "raw": "{{base_url}}/kost",
@@ -72,16 +107,20 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "// TODO 3: tambahkan pm.test yang memeriksa status code 201",
               "pm.test('Status code adalah 201', function () {",
-              "pm.response.to.have.status(201);",
+              "    pm.response.to.have.status(201);",
               "});",
               "",
-              "// TODO 4: simpan id dari response ke environment variable",
-              "// 'kostId' menggunakan pm.environment.set(), agar dapat",
-              "// dipakai oleh request 'GET Satu Kost' di bawah ini",
               "const jsonData = pm.response.json();",
-              "pm.environment.set('kostId', jsonData.id);"
+              "pm.environment.set('kostId', jsonData.id);",
+              "",
+              "pm.test('Struktur data JSON sesuai', function () {",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.expect(jsonData).to.have.property('nama');",
+              "    pm.expect(jsonData).to.have.property('lokasi');",
+              "    pm.expect(jsonData).to.have.property('harga');",
+              "    pm.expect(jsonData).to.have.property('status');",
+              "});"
             ]
           }
         }
@@ -109,16 +148,89 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "// TODO 5: tambahkan pm.test yang memeriksa status code 200",
-              "pm.test('Status code adalah 200', function(){",
-              "pm.response.to.have.status(200);",
+              "pm.test('Status code adalah 200', function () {",
+              "    pm.response.to.have.status(200);",
               "});",
               "",
-              "// TODO 6: tambahkan pm.test yang memastikan data memiliki",
-              "// properti 'nama'",
-              "pm.test('Data memiliki properti nama', function () {",
-              "const jsonData = pm.response.json();",
-              "pm.expect(jsonData).to.have.property('nama');",
+              "pm.test('Data memiliki properti nama dan struktur lengkap', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('nama');",
+              "    pm.expect(jsonData.id).to.eql(parseInt(pm.environment.get('kostId')));",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT Update Kost",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nama\": \"Kost Musi Raya Updated\",\n  \"lokasi\": \"KM 7, Palembang\",\n  \"harga\": \"1200000\",\n  \"status\": \"tidak tersedia\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/kost/{{kostId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost",
+            "{{kostId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code adalah 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Data berhasil diperbarui', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.nama).to.eql('Kost Musi Raya Updated');",
+              "    pm.expect(jsonData.status).to.eql('tidak tersedia');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE Kost",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/kost/{{kostId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "kost",
+            "{{kostId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code adalah 204', function () {",
+              "    pm.response.to.have.status(204);",
               "});"
             ]
           }
