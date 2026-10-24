@@ -1,0 +1,15 @@
+{
+  "name": "mini-project-restful-api-crud-nosql",
+  "version": "1.0.0",
+  "description": "Mini project RESTful API CRUD untuk Data NoSQL (filtering, sorting, pagination, error handling) - Pertemuan 11-12 PAW II",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
+    "mongoose": "^8.5.0"
+  }
+}
